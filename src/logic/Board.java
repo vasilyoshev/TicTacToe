@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
  */
 public class Board {
 	// package access TODO make setters and getters
-	Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell instances
+	public Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell instances
 
 	/** Constructor to initialize the game board */
 	public Board() {

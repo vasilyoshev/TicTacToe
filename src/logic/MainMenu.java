@@ -11,9 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
-public class MainMenuFrame extends JFrame{
+public class MainMenu extends JFrame{
 	
-	public MainMenuFrame() {
+	public MainMenu() {
 		getContentPane().setLayout(null);
 		setTitle("Tic-tac-toe");
 		setBounds(100, 100, 300, 400);
@@ -26,15 +26,28 @@ public class MainMenuFrame extends JFrame{
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JButton btnSingleplayer = new JButton("Singleplayer");
+		btnSingleplayer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame f = new SingleMenu();
+				f.setVisible(true);
+				setVisible(false);
+				dispose();
+				
+			}
+		});
 		panel.add(btnSingleplayer);
 		
 		JButton btnMultiplayer = new JButton("Multiplayer");
+		btnMultiplayer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		panel.add(btnMultiplayer);
 		
 		JButton btnCouchCoop = new JButton("Couch Co-Op");
 		btnCouchCoop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame f = new CouchCoopFrame();
+				JFrame f = new CouchMenu();
 				f.setVisible(true);
 				setVisible(false);
 				dispose();

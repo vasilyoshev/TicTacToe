@@ -7,7 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,15 +28,21 @@ public class GameMain extends JPanel {
 	private int resultX = 0;
 	private int resultO = 0;
 
-	private Board board; // the game board
-	private State currentState; // the current state of the game
-	private Seed currentPlayer; // the current player
+	protected Board board; // the game board
+	protected State currentState; // the current state of the game
+	protected Seed currentPlayer; // the current player
+	protected Seed startingPlayer = Seed.CROSS;
 	private JLabel resultLabel; // result sign
 	private JButton changeTheme; // change theme button
 	private JButton newGame; // new game button
 	private JButton reset; // reset game button
 	private JLabel names; // prints names of players
 	private JLabel result; // prints current score
+	public static String player1;
+	public static String player2;
+	
+	protected int rowSelected;
+	protected int colSelected;
 
 	/** Constructor to setup the UI and game components */
 	public GameMain() {
@@ -81,14 +91,10 @@ public class GameMain extends JPanel {
 				initGame();
 				resultX = 0;
 				resultO = 0;
-				repaint();
+				reset();
 			}
 		});
-
-		names = new JLabel("<html>Ivelina<br><br>Vasil</html>"); // TODO add
-																	// names
-																	// from main
-																	// menu
+		names = new JLabel("<html>" + player1 + "<br><br>" + player2 + "</html>");
 		names.setVerticalAlignment(SwingConstants.TOP);
 		names.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		names.setBounds(464, 127, 220, 158);
@@ -97,7 +103,7 @@ public class GameMain extends JPanel {
 		result = new JLabel("<html>0<br><br>0</html>", SwingConstants.RIGHT);
 		result.setVerticalAlignment(SwingConstants.TOP);
 		result.setFont(new Font("Century Gothic", Font.PLAIN, 30));
-		result.setBounds(603, 122, 80, 158);
+		result.setBounds(604, 127, 80, 158);
 		add(result);
 
 		board = new Board(); // allocate the game-board
@@ -107,27 +113,36 @@ public class GameMain extends JPanel {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) { // mouse-clicked handler
-				int mouseX = e.getX();
-				int mouseY = e.getY();
-				// Get the row and column clicked
-				int rowSelected = mouseY / CELL_SIZE;
-				int colSelected = mouseX / CELL_SIZE;
-
-				if (currentState == State.PLAYING) {
-					if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS
-							&& board.cells[rowSelected][colSelected].content == Seed.EMPTY) {
-						board.cells[rowSelected][colSelected].content = currentPlayer; // move
-						updateGame(currentPlayer, rowSelected, colSelected); // update
-																				// currentState
-						// Switch player
-						currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-					}
-
-					// Refresh the drawing canvas
-					repaint(); // Call-back paintComponent().
-				}
+				click(e);
 			}
 		});
+	}
+
+	public void click(MouseEvent e) {
+		int mouseX = e.getX();
+		int mouseY = e.getY();
+		// Get the row and column clicked
+		rowSelected = mouseY / CELL_SIZE;
+		colSelected = mouseX / CELL_SIZE;
+
+		if (currentState == State.PLAYING) {
+			if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS
+					&& board.cells[rowSelected][colSelected].content == Seed.EMPTY) {
+				board.cells[rowSelected][colSelected].content = currentPlayer; // move
+				updateGame(currentPlayer, rowSelected, colSelected); // update
+																		// currentState
+				// Switch player
+				currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+			}
+
+			// Refresh the drawing canvas
+			repaint(); // Call-back paintComponent().
+		}
+	}
+	
+	public void reset() {
+		currentPlayer = Seed.CROSS;
+		repaint();
 	}
 
 	/** Initialize the game-board contents and the current-state */
@@ -135,10 +150,14 @@ public class GameMain extends JPanel {
 		board.init();
 		if (currentState == State.DRAW) {
 			currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+			startingPlayer = currentPlayer;
 		} else if (currentState == State.CROSS_WON || currentState == State.NOUGHT_WON) {
 			currentPlayer = (currentState == State.CROSS_WON) ? Seed.CROSS : Seed.NOUGHT;
-		} else { // first move ever
-			currentPlayer = Seed.CROSS;
+			startingPlayer = currentPlayer;
+		} else { // when State is PLAYING
+			// currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT :
+			// Seed.CROSS;
+			currentPlayer = startingPlayer;
 		}
 		currentState = State.PLAYING;
 	}
@@ -152,10 +171,10 @@ public class GameMain extends JPanel {
 			currentState = (theSeed == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
 			if (currentState == State.CROSS_WON) {
 				resultX++;
-				names.setText("<html>Ivelina<br><br>Vasil</html>");
+				names.setText("<html>" + player1 + "<br><br>" + player2 + "</html>");
 			} else {
 				resultO++;
-				names.setText("<html>Ivelina<br><br>Vasil</html>");
+				names.setText("<html>" + player1 + "<br><br>" + player2 + "</html>");
 			}
 		} else if (board.isDraw()) { // check for draw
 			currentState = State.DRAW;
@@ -167,7 +186,16 @@ public class GameMain extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) { // invoke via repaint()
 		super.paintComponent(g); // fill background
-		board.paint(g); // ask the game board to paint itself
 		result.setText("<html>" + resultX + "<br><br>" + resultO + "</html>");
+		// add background image
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("background.png"));
+		} catch (IOException e) {
+			// TODO
+		}
+		g.drawImage(img, 0, 0, null);
+
+		board.paint(g); // ask the game board to paint itself
 	}
 }

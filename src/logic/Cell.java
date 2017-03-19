@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
  */
 public class Cell {
 	// Package access
-	Seed content; // Seed.EMPTY, Seed.CROSS, Seed.NOUGHT
-	int row, col; // row and column of this cell
+	public Seed content; // Seed.EMPTY, Seed.CROSS, Seed.NOUGHT
+	public int row, col; // row and column of this cell
 
 	/** Constructor to initialize this cell with the specified row and col */
 	public Cell(int row, int col) {
