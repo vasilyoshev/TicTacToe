@@ -106,8 +106,6 @@ public class GameMain extends JPanel {
 		result.setBounds(604, 127, 80, 158);
 		add(result);
 
-		board = new Board(); // allocate the game-board
-		initGame(); // Initialize the game variables
 
 		// This JPanel fires MouseEvent
 		this.addMouseListener(new MouseAdapter() {
@@ -116,6 +114,8 @@ public class GameMain extends JPanel {
 				click(e);
 			}
 		});
+		board = new Board(); // allocate the game-board
+		initGame(); // Initialize the game variables
 	}
 
 	public void click(MouseEvent e) {

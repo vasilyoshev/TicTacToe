@@ -1,7 +1,5 @@
 package logic;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import AI.AIPlayer;
@@ -18,7 +16,7 @@ public class GameSingle extends GameMain {
 		super();
 		playerStarts = playerFirstChosen;
 		initAI();
-}
+	}
 
 	public void reset() {
 		playerStarts = playerFirstChosen;
@@ -29,7 +27,7 @@ public class GameSingle extends GameMain {
 
 	public void initGame() {
 		super.initGame();
-		
+
 		if (!playerStarts && aiPlayer != null) {
 			currentPlayer = aiPlayer.getSeed();
 			moveAI();
@@ -41,7 +39,7 @@ public class GameSingle extends GameMain {
 
 	private void initAI() {
 		aiPlayer = new AIPlayerTableLookup(board);
-		aiPlayer.setSeed(playerStarts == true ? Seed.NOUGHT : Seed.CROSS);
+		aiPlayer.setSeed(playerStarts ? Seed.NOUGHT : Seed.CROSS);
 	}
 
 	public void updateGame(Seed theSeed, int row, int col) {
@@ -68,7 +66,7 @@ public class GameSingle extends GameMain {
 					&& board.cells[rowSelected][colSelected].content == Seed.EMPTY) {
 				board.cells[rowSelected][colSelected].content = currentPlayer; // move
 				updateGame(currentPlayer, rowSelected, colSelected); // update
-																		// currentState
+				 // currentState
 				// Switch player
 				currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
 				moveAI();
@@ -80,10 +78,16 @@ public class GameSingle extends GameMain {
 	}
 
 	private void moveAI() {
-		if (currentState == State.PLAYING) { // TODO ai
+		if (currentState == State.PLAYING) {
 			int[] computerMove = aiPlayer.move();
 			rowSelected = computerMove[0];
 			colSelected = computerMove[1];
+			try {
+				Thread.sleep(1000); // TODO 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			board.cells[rowSelected][colSelected].content = currentPlayer;
 			updateGame(currentPlayer, rowSelected, colSelected);
 			// Switch player

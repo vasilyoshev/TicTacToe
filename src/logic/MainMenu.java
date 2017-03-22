@@ -15,10 +15,10 @@ public class MainMenu extends JFrame{
 	
 	public MainMenu() {
 		getContentPane().setLayout(null);
-		setTitle("Tic-tac-toe");
 		setBounds(100, 100, 300, 400);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Tic-tac-toe");
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 111, 264, 239);
@@ -40,6 +40,10 @@ public class MainMenu extends JFrame{
 		JButton btnMultiplayer = new JButton("Multiplayer");
 		btnMultiplayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JFrame f = new MultiMenu();
+				f.setVisible(true);
+				setVisible(false);
+				dispose();
 			}
 		});
 		panel.add(btnMultiplayer);

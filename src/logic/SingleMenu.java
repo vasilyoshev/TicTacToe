@@ -5,29 +5,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
-public class SingleMenu extends JFrame {
+public class SingleMenu extends Menu {
 	private JTextField player1;
 	private JTextField player2;
 	private JButton go;
 	private JCheckBox compStarts;
 
 	public SingleMenu() {
-		getContentPane().setLayout(null);
 		setTitle("Couch Co-Op");
-		setBounds(100, 100, 300, 400);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 264, 339);
-		getContentPane().add(panel);
 
 		JLabel enterPlayer1 = new JLabel("Player 1 (X):");
 		enterPlayer1.setBounds(10, 14, 101, 14);
@@ -56,7 +48,7 @@ public class SingleMenu extends JFrame {
 					GameMain.player1 = player1.getText();
 					GameMain.player2 = player2.getText();
 				}
-				JFrame frame = new JFrame("Couch Co-op");
+				JFrame frame = new JFrame("Single Game");
 				frame.setContentPane(new GameSingle());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setResizable(false);
@@ -69,7 +61,6 @@ public class SingleMenu extends JFrame {
 			}
 		});
 		go.setFont(new Font("Tahoma", Font.PLAIN, 98));
-		panel.setLayout(null);
 		panel.add(enterPlayer1);
 		panel.add(player1);
 		panel.add(enterPlayer2);
