@@ -7,18 +7,21 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ui.game.Game;
+
 /**
  * The Board class models the ROWS-by-COLS game-board.
  */
 public class Board {
 	// package access TODO make setters and getters
-	public Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell instances
+	public Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell
+							// instances
 
 	/** Constructor to initialize the game board */
 	public Board() {
-		cells = new Cell[GameMain.ROWS][GameMain.COLS]; // allocate the array
-		for (int row = 0; row < GameMain.ROWS; ++row) {
-			for (int col = 0; col < GameMain.COLS; ++col) {
+		cells = new Cell[Game.ROWS][Game.COLS]; // allocate the array
+		for (int row = 0; row < Game.ROWS; ++row) {
+			for (int col = 0; col < Game.COLS; ++col) {
 				cells[row][col] = new Cell(row, col); // allocate element of
 														// array
 			}
@@ -27,8 +30,8 @@ public class Board {
 
 	/** Initialize (or re-initialize) the game board */
 	public void init() {
-		for (int row = 0; row < GameMain.ROWS; ++row) {
-			for (int col = 0; col < GameMain.COLS; ++col) {
+		for (int row = 0; row < Game.ROWS; ++row) {
+			for (int col = 0; col < Game.COLS; ++col) {
 				cells[row][col].clear(); // clear the cell content
 			}
 		}
@@ -36,8 +39,8 @@ public class Board {
 
 	/** Return true if it is a draw (i.e., no more EMPTY cell) */
 	public boolean isDraw() {
-		for (int row = 0; row < GameMain.ROWS; ++row) {
-			for (int col = 0; col < GameMain.COLS; ++col) {
+		for (int row = 0; row < Game.ROWS; ++row) {
+			for (int col = 0; col < Game.COLS; ++col) {
 				if (cells[row][col].content == Seed.EMPTY) {
 					return false; // an empty seed found, not a draw, exit
 				}
@@ -73,8 +76,8 @@ public class Board {
 		g.drawImage(img, 0, 0, null);
 
 		// Draw all the cells
-		for (int row = 0; row < GameMain.ROWS; ++row) {
-			for (int col = 0; col < GameMain.COLS; ++col) {
+		for (int row = 0; row < Game.ROWS; ++row) {
+			for (int col = 0; col < Game.COLS; ++col) {
 				cells[row][col].paint(g); // ask the cell to paint itself
 			}
 		}

@@ -1,4 +1,4 @@
-package logic;
+package ui.game;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,34 +18,39 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import logic.Board;
+import logic.Seed;
+import logic.State;
+
 @SuppressWarnings("serial")
-public class GameMain extends JPanel {
+public class Game extends JPanel {
 	// Named-constants for the game board
 	public static final int ROWS = 3;
 	public static final int COLS = 3;
 	public static final int CELL_SIZE = 150; // cell width and height (square)
-	public static final String TITLE = "Tic Tac Toe";
-	private int resultX = 0;
-	private int resultO = 0;
 
 	protected Board board; // the game board
 	protected State currentState; // the current state of the game
 	protected Seed currentPlayer; // the current player
 	protected Seed startingPlayer = Seed.CROSS;
+	public static boolean playerStarts; // TODO to be used in couch and multi
+	public static String playerX;
+	public static String playerO;
+	protected int resultX = 0;
+	protected int resultO = 0;
+
 	private JLabel resultLabel; // result sign
 	private JButton changeTheme; // change theme button
 	private JButton newGame; // new game button
 	private JButton reset; // reset game button
 	private JLabel names; // prints names of players
 	private JLabel result; // prints current score
-	public static String player1;
-	public static String player2;
-	
+
 	protected int rowSelected;
 	protected int colSelected;
 
 	/** Constructor to setup the UI and game components */
-	public GameMain() {
+	public Game() {
 
 		setLayout(null); // use absolute layout
 		setPreferredSize(new Dimension(700, 450));
@@ -69,32 +74,17 @@ public class GameMain extends JPanel {
 
 		newGame = new JButton("");
 		newGame.setIcon(new ImageIcon("new game.png"));
-		newGame.setBounds(464, 374, 100, 65);
+		newGame.setBounds(464, 374, 220, 65);
 		newGame.setContentAreaFilled(false); // remove def img, leave only icon
 		newGame.setBorderPainted(false); // remove borders of the button
 		add(newGame);
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				initGame();
-				repaint();
-			}
-		});
-
-		reset = new JButton("");
-		reset.setIcon(new ImageIcon("reset.png"));
-		reset.setBounds(583, 374, 100, 65);
-		reset.setContentAreaFilled(false);
-		reset.setBorderPainted(false);
-		add(reset);
-		reset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				initGame();
-				resultX = 0;
-				resultO = 0;
 				reset();
 			}
 		});
-		names = new JLabel("<html>" + player1 + "<br><br>" + player2 + "</html>");
+
+		names = new JLabel("<html>" + playerX + "<br><br>" + playerO + "</html>");
 		names.setVerticalAlignment(SwingConstants.TOP);
 		names.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		names.setBounds(464, 127, 220, 158);
@@ -105,7 +95,6 @@ public class GameMain extends JPanel {
 		result.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		result.setBounds(604, 127, 80, 158);
 		add(result);
-
 
 		// This JPanel fires MouseEvent
 		this.addMouseListener(new MouseAdapter() {
@@ -118,45 +107,41 @@ public class GameMain extends JPanel {
 		initGame(); // Initialize the game variables
 	}
 
-	public void click(MouseEvent e) {
+	protected void click(MouseEvent e) {
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 		// Get the row and column clicked
 		rowSelected = mouseY / CELL_SIZE;
 		colSelected = mouseX / CELL_SIZE;
 
-		if (currentState == State.PLAYING) {
 			if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS
 					&& board.cells[rowSelected][colSelected].content == Seed.EMPTY) {
 				board.cells[rowSelected][colSelected].content = currentPlayer; // move
 				updateGame(currentPlayer, rowSelected, colSelected); // update
 																		// currentState
-				// Switch player
-				currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
 			}
 
 			// Refresh the drawing canvas
 			repaint(); // Call-back paintComponent().
-		}
 	}
-	
-	public void reset() {
+
+	protected void reset() {
+		resultX = 0;
+		resultO = 0;
+		initGame();
+
 		currentPlayer = Seed.CROSS;
+		startingPlayer = currentPlayer;
 		repaint();
 	}
 
 	/** Initialize the game-board contents and the current-state */
 	public void initGame() {
 		board.init();
-		if (currentState == State.DRAW) {
-			currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-			startingPlayer = currentPlayer;
-		} else if (currentState == State.CROSS_WON || currentState == State.NOUGHT_WON) {
+		if (currentState == State.CROSS_WON || currentState == State.NOUGHT_WON) {
 			currentPlayer = (currentState == State.CROSS_WON) ? Seed.CROSS : Seed.NOUGHT;
 			startingPlayer = currentPlayer;
 		} else { // when State is PLAYING
-			// currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT :
-			// Seed.CROSS;
 			currentPlayer = startingPlayer;
 		}
 		currentState = State.PLAYING;
@@ -171,15 +156,22 @@ public class GameMain extends JPanel {
 			currentState = (theSeed == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
 			if (currentState == State.CROSS_WON) {
 				resultX++;
-				names.setText("<html>" + player1 + "<br><br>" + player2 + "</html>");
+				names.setText("<html>" + playerX + "<br><br>" + playerO + "</html>");
 			} else {
 				resultO++;
-				names.setText("<html>" + player1 + "<br><br>" + player2 + "</html>");
+				names.setText("<html>" + playerX + "<br><br>" + playerO + "</html>");
 			}
+			// TODO Display crossed triple
+			initGame();
 		} else if (board.isDraw()) { // check for draw
 			currentState = State.DRAW;
+			// TODO display DRAW message
+			initGame();
+		} else { // PLAYING
+			// Switch player
+			currentState = State.PLAYING;
+			currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
 		}
-		// Otherwise, no change to current state (PLAYING).
 	}
 
 	/** Custom painting codes on this JPanel */

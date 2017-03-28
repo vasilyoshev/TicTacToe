@@ -1,14 +1,10 @@
 
-
-
-
-
 package AI;
 
 import logic.Board;
 import logic.Cell;
-import logic.GameMain;
 import logic.Seed;
+import ui.game.Game;
 
 /**
  * Abstract superclass for all AI players with different strategies. To
@@ -21,8 +17,8 @@ import logic.Seed;
  * move is available, i.e., not game-over yet.
  */
 public abstract class AIPlayer {
-	protected int ROWS = GameMain.ROWS; // number of rows
-	protected int COLS = GameMain.COLS; // number of columns
+	protected int ROWS = Game.ROWS; // number of rows
+	protected int COLS = Game.COLS; // number of columns
 
 	protected Cell[][] cells; // the board's ROWS-by-COLS array of Cells
 	protected Seed mySeed; // computer's seed
@@ -37,12 +33,12 @@ public abstract class AIPlayer {
 	public void setSeed(Seed seed) {
 		this.mySeed = seed;
 		oppSeed = (mySeed == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-}
-	
+	}
+
 	public Seed getSeed() {
 		return mySeed;
 	}
 
-/** Abstract method to get next move. Return int[2] of {row, col} */
-   public abstract int[] move(); // to be implemented by subclasses
+	/** Abstract method to get next move. Return int[2] of {row, col} */
+	public abstract int[] move(); // to be implemented by subclasses
 }

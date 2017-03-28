@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ui.game.Game;
+
 /**
  * The Cell class models each individual cell of the game board.
  */
@@ -29,8 +31,8 @@ public class Cell {
 
 	/** Paint itself on the graphics canvas, given the Graphics context */
 	public void paint(Graphics g) {
-		int x1 = col * GameMain.CELL_SIZE;
-		int y1 = row * GameMain.CELL_SIZE;
+		int x1 = col * Game.CELL_SIZE;
+		int y1 = row * Game.CELL_SIZE;
 
 		BufferedImage img = null;
 		if (content == Seed.CROSS) {

@@ -1,77 +1,86 @@
 package network;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import logic.GameMulti;
-import logic.GameSingle;
+import ui.game.GameMulti;
 
-public class Server {
-	protected int serverPort;
-	protected ServerSocket serverSocket = null;
-	protected Socket clientSocket = null;
-	protected boolean isStopped = false;
+public class Server implements Runnable {
+
+	protected int port;
+	protected ServerSocket serverSocket;
+	protected Socket clientSocket;
+	protected Thread runningThread;
+
+	GameMulti p;
+	JFrame f;
 
 	public Server(int port) {
-		this.serverPort = port;
+		this.port = port;
+		serverSocket = null;
+		clientSocket = null;
+		runningThread = null;
 	}
-	
+
 	public void run() {
-		openServerSocket();
-
-		// while (!isStopped()) {
-		try {
-			clientSocket = this.serverSocket.accept();
-		} catch (IOException e) {
-			if (isStopped()) {
-				System.out.println("Server Stopped.");
-				return;
-			}
-			throw new RuntimeException("Error accepting client connection", e);
+		synchronized (this) { // TODO do I need this?
+			runningThread = Thread.currentThread();
 		}
 
 		try {
-			processClientRequest(clientSocket);
+			openServerSocket();
+			waitForConnection();
+			setupStreams();
+			whileConnected();
 		} catch (IOException e) {
-			// log exception and go on to next request.
+			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
-		// }
 	}
 
-	private void processClientRequest(Socket clientSocket) throws IOException {
-		JFrame frame = new JFrame("Server Game");
-		frame.setContentPane(new GameMulti());
+	private void openServerSocket() throws IOException {
+		serverSocket = new ServerSocket(port);
+	}
+
+	private void waitForConnection() throws IOException {
+		clientSocket = serverSocket.accept();
+	}
+
+	private void setupStreams() throws IOException {
+		Utils.output = new DataOutputStream(clientSocket.getOutputStream());
+		Utils.output.flush();
+		Utils.input = new DataInputStream(clientSocket.getInputStream());
+	}
+
+	private void whileConnected() throws IOException {
+		JFrame frame = new JFrame("Multiplayer game as Server");
+		GameMulti game = new GameMulti(true);
+		frame.setContentPane(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.pack();
 		frame.setLocationRelativeTo(null); // center the application
 		frame.setVisible(true); // show it
-	}
 
-	private synchronized boolean isStopped() {
-		return this.isStopped;
-	}
-
-	public synchronized void stop() {
-		this.isStopped = true;
-		try {
-			this.serverSocket.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Error closing server", e);
+		while (clientSocket.isConnected()) {
+			int[] move = Utils.receiveMove();
+			game.receiveMove(move);
 		}
 	}
 
-	private void openServerSocket() {
+	public void closeConnection() {
 		try {
-			this.serverSocket = new ServerSocket(this.serverPort);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot open port " + serverPort, e);
+			Utils.output.close(); // Closes the output path to the client
+			Utils.input.close(); // Closes the input path to the server
+			clientSocket.close(); // Closes the connection with the client
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
 		}
 	}
-
 }
