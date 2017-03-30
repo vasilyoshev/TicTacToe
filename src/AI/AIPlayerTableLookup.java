@@ -26,11 +26,10 @@ public class AIPlayerTableLookup extends AIPlayer {
 	@Override
 	public int[] move() {
 		for (int[] move : preferredMoves) {
-			if (cells[move[0]][move[1]].content == Seed.EMPTY) {
+			if (cells[move[0]][move[1]].getContent() == Seed.EMPTY) {
 				return move;
 			}
 		}
-		assert false : "No empty cell?!";
 		return null;
 	}
 }

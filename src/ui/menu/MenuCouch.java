@@ -13,14 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import ui.game.Game;
 import ui.game.GameCouch;
+import ui.game.GameUtils;
 
 @SuppressWarnings("serial")
 public class MenuCouch extends Menu {
 	private JLabel player1Label;
 	private JTextField player1TextField;
-	JLabel player2Label;
+	private JLabel player2Label;
 	private JTextField player2TextField;
 	private JButton play;
 
@@ -62,8 +62,8 @@ public class MenuCouch extends Menu {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				dispose();
-				Game.playerX = player1TextField.getText();
-				Game.playerO = player2TextField.getText();
+				GameUtils.setPlayerX(player1TextField.getText());
+				GameUtils.setPlayerO(player2TextField.getText());
 				JFrame frame = new JFrame("Couch Co-op");
 				frame.setContentPane(new GameCouch());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

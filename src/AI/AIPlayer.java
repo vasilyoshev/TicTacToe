@@ -4,7 +4,6 @@ package AI;
 import logic.Board;
 import logic.Cell;
 import logic.Seed;
-import ui.game.Game;
 
 /**
  * Abstract superclass for all AI players with different strategies. To
@@ -17,16 +16,13 @@ import ui.game.Game;
  * move is available, i.e., not game-over yet.
  */
 public abstract class AIPlayer {
-	protected int ROWS = Game.ROWS; // number of rows
-	protected int COLS = Game.COLS; // number of columns
-
 	protected Cell[][] cells; // the board's ROWS-by-COLS array of Cells
 	protected Seed mySeed; // computer's seed
 	protected Seed oppSeed; // opponent's seed
 
 	/** Constructor with reference to game board */
 	public AIPlayer(Board board) {
-		cells = board.cells;
+		cells = board.getCells();
 	}
 
 	/** Set/change the seed used by computer and opponent */

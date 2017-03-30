@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class Menu extends JFrame {
+public abstract class Menu extends JFrame {
 
 	protected JPanel panel;
 
@@ -39,5 +39,4 @@ public class Menu extends JFrame {
 		add(panel);
 		panel.setLayout(null);
 	}
-
 }

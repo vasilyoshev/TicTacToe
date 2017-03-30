@@ -4,9 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Utils {
+// final to prevent subclassing and improve efficiency at runtime
+public final class IOUtils {
 	public static DataInputStream input;
 	public static DataOutputStream output;
+
+	// private constructor to prevent instantiation
+	private IOUtils() {
+	}
 
 	public static int[] receiveMove() {
 		int[] move = new int[2];

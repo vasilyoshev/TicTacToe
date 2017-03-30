@@ -19,8 +19,8 @@ public class Client implements Runnable {
 		this.IP = IP;
 		this.port = port;
 		socket = null;
-		Utils.input = null;
-		Utils.output = null;
+		IOUtils.input = null;
+		IOUtils.output = null;
 		runningThread = null;
 	}
 
@@ -45,9 +45,9 @@ public class Client implements Runnable {
 	}
 
 	private void setupStreams() throws IOException {
-		Utils.output = new DataOutputStream(socket.getOutputStream());
-		Utils.output.flush();
-		Utils.input = new DataInputStream(socket.getInputStream());
+		IOUtils.output = new DataOutputStream(socket.getOutputStream());
+		IOUtils.output.flush();
+		IOUtils.input = new DataInputStream(socket.getInputStream());
 	}
 
 	private void whileConnected() throws IOException {
@@ -61,15 +61,15 @@ public class Client implements Runnable {
 		frame.setVisible(true);
 		
 		while (socket.isConnected()) {
-			int[] move = Utils.receiveMove();
+			int[] move = IOUtils.receiveMove();
 			game.receiveMove(move);
 		}
 	}
 
 	public void closeConnection() {
 		try {
-			Utils.output.close(); // Closes the output path to the client
-			Utils.input.close(); // Closes the input path to the server
+			IOUtils.output.close(); // Closes the output path to the client
+			IOUtils.input.close(); // Closes the input path to the server
 			socket.close(); // Closes the connection with the client
 		} catch (IOException ioException) {
 			ioException.printStackTrace();

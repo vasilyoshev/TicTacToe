@@ -12,10 +12,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import ui.game.Game;
-import ui.game.GameSingle;
 import javax.swing.SwingConstants;
+
+import ui.game.GameSingle;
+import ui.game.GameUtils;
 
 @SuppressWarnings("serial")
 public class MenuSingle extends Menu {
@@ -70,11 +70,11 @@ public class MenuSingle extends Menu {
 				dispose();
 				if (compStartsCheckBox.isSelected()) {
 					GameSingle.playerIsX = false;
-					Game.playerX = computerTextField.getText();
-					Game.playerO = playerTextField.getText();
+					GameUtils.setPlayerX(computerTextField.getText());
+					GameUtils.setPlayerO(playerTextField.getText());
 				} else {
-					Game.playerX = playerTextField.getText();
-					Game.playerO = computerTextField.getText();
+					GameUtils.setPlayerX(playerTextField.getText());
+					GameUtils.setPlayerO(computerTextField.getText());
 				}
 				JFrame frame = new JFrame("Single Game");
 				frame.setContentPane(new GameSingle());
@@ -86,7 +86,6 @@ public class MenuSingle extends Menu {
 
 			}
 		});
-		
 
 		panel.add(playerLabel);
 		panel.add(playerTextField);

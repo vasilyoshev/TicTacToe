@@ -23,31 +23,13 @@ import logic.Seed;
 import logic.State;
 
 @SuppressWarnings("serial")
-public class Game extends JPanel {
-	// Named-constants for the game board
-	public static final int ROWS = 3;
-	public static final int COLS = 3;
-	public static final int CELL_SIZE = 150; // cell width and height (square)
-
-	protected Board board; // the game board
-	protected State currentState; // the current state of the game
-	protected Seed currentPlayer; // the current player
-	protected Seed startingPlayer = Seed.CROSS;
-	public static boolean playerStarts; // TODO to be used in couch and multi
-	public static String playerX;
-	public static String playerO;
-	protected int resultX = 0;
-	protected int resultO = 0;
+public abstract class Game extends JPanel {
 
 	private JLabel resultLabel; // result sign
 	private JButton changeTheme; // change theme button
 	private JButton newGame; // new game button
-	private JButton reset; // reset game button
 	private JLabel names; // prints names of players
 	private JLabel result; // prints current score
-
-	protected int rowSelected;
-	protected int colSelected;
 
 	/** Constructor to setup the UI and game components */
 	public Game() {
@@ -80,11 +62,11 @@ public class Game extends JPanel {
 		add(newGame);
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				reset();
+				newGame();
 			}
 		});
 
-		names = new JLabel("<html>" + playerX + "<br><br>" + playerO + "</html>");
+		names = new JLabel("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 		names.setVerticalAlignment(SwingConstants.TOP);
 		names.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		names.setBounds(464, 127, 220, 158);
@@ -103,7 +85,8 @@ public class Game extends JPanel {
 				click(e);
 			}
 		});
-		board = new Board(); // allocate the game-board
+
+		GameUtils.setBoard(new Board()); // allocate the game-board
 		initGame(); // Initialize the game variables
 	}
 
@@ -111,40 +94,39 @@ public class Game extends JPanel {
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 		// Get the row and column clicked
-		rowSelected = mouseY / CELL_SIZE;
-		colSelected = mouseX / CELL_SIZE;
+		GameUtils.setRow(mouseY / GameUtils.getCellSize());
+		GameUtils.setCol(mouseX / GameUtils.getCellSize());
 
-			if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS
-					&& board.cells[rowSelected][colSelected].content == Seed.EMPTY) {
-				board.cells[rowSelected][colSelected].content = currentPlayer; // move
-				updateGame(currentPlayer, rowSelected, colSelected); // update
-																		// currentState
-			}
-
-			// Refresh the drawing canvas
-			repaint(); // Call-back paintComponent().
+		if (GameUtils.getRow() >= 0 && GameUtils.getRow() < GameUtils.getRows() && GameUtils.getCol() >= 0 && GameUtils.getCol() < GameUtils.getCols()
+				&& GameUtils.getBoard().getCells()[GameUtils.getRow()][GameUtils.getCol()].getContent() == Seed.EMPTY
+				&& GameUtils.isMyMove()) {
+			GameUtils.getBoard().getCells()[GameUtils.getRow()][GameUtils.getCol()].setContent(GameUtils.getCurrentPlayer()); // move
+			updateGame(GameUtils.getCurrentPlayer(), GameUtils.getRow(), GameUtils.getCol()); // update
+																				// currentState
+		}
+		// Refresh the drawing canvas
+		repaint(); // Call-back paintComponent().
 	}
 
-	protected void reset() {
-		resultX = 0;
-		resultO = 0;
+	protected void newGame() {
+		GameUtils.setResultX(0);
+		GameUtils.setResultO(0);
 		initGame();
-
-		currentPlayer = Seed.CROSS;
-		startingPlayer = currentPlayer;
+		GameUtils.setCurrentPlayer(Seed.CROSS);
+		GameUtils.setStartingPlayer(GameUtils.getCurrentPlayer());
 		repaint();
 	}
 
 	/** Initialize the game-board contents and the current-state */
 	public void initGame() {
-		board.init();
-		if (currentState == State.CROSS_WON || currentState == State.NOUGHT_WON) {
-			currentPlayer = (currentState == State.CROSS_WON) ? Seed.CROSS : Seed.NOUGHT;
-			startingPlayer = currentPlayer;
+		GameUtils.getBoard().init();
+		if (GameUtils.getCurrentState() == State.CROSS_WON || GameUtils.getCurrentState() == State.NOUGHT_WON) {
+			GameUtils.setCurrentPlayer((GameUtils.getCurrentState() == State.CROSS_WON) ? Seed.CROSS : Seed.NOUGHT);
+			GameUtils.setStartingPlayer(GameUtils.getCurrentPlayer());
 		} else { // when State is PLAYING
-			currentPlayer = startingPlayer;
+			GameUtils.setCurrentPlayer(GameUtils.getStartingPlayer());
 		}
-		currentState = State.PLAYING;
+		GameUtils.setCurrentState(State.PLAYING);
 	}
 
 	/**
@@ -152,25 +134,25 @@ public class Game extends JPanel {
 	 * (row, col)
 	 */
 	public void updateGame(Seed theSeed, int row, int col) {
-		if (board.hasWon(theSeed, row, col)) { // check for win
-			currentState = (theSeed == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
-			if (currentState == State.CROSS_WON) {
-				resultX++;
-				names.setText("<html>" + playerX + "<br><br>" + playerO + "</html>");
+		if (GameUtils.getBoard().hasWon(theSeed, row, col)) { // check for win
+			GameUtils.setCurrentState((theSeed == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON);
+			if (GameUtils.getCurrentState() == State.CROSS_WON) {
+				GameUtils.setResultX(GameUtils.getResultX() + 1);
+				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			} else {
-				resultO++;
-				names.setText("<html>" + playerX + "<br><br>" + playerO + "</html>");
+				GameUtils.setResultO(GameUtils.getResultO() + 1);
+				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			}
 			// TODO Display crossed triple
 			initGame();
-		} else if (board.isDraw()) { // check for draw
-			currentState = State.DRAW;
+		} else if (GameUtils.getBoard().isDraw()) { // check for draw
+			GameUtils.setCurrentState(State.DRAW);
 			// TODO display DRAW message
 			initGame();
 		} else { // PLAYING
 			// Switch player
-			currentState = State.PLAYING;
-			currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+			GameUtils.setCurrentState(State.PLAYING);
+			GameUtils.setCurrentPlayer((GameUtils.getCurrentPlayer() == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS);
 		}
 	}
 
@@ -178,7 +160,7 @@ public class Game extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) { // invoke via repaint()
 		super.paintComponent(g); // fill background
-		result.setText("<html>" + resultX + "<br><br>" + resultO + "</html>");
+		result.setText("<html>" + GameUtils.getResultX() + "<br><br>" + GameUtils.getResultO() + "</html>");
 		// add background image
 		BufferedImage img = null;
 		try {
@@ -188,6 +170,6 @@ public class Game extends JPanel {
 		}
 		g.drawImage(img, 0, 0, null);
 
-		board.paint(g); // ask the game board to paint itself
+		GameUtils.getBoard().paint(g); // ask the game board to paint itself
 	}
 }
