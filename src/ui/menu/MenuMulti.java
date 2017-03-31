@@ -16,7 +16,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import network.Client;
+import network.IOUtils;
 import network.Server;
+import ui.Image;
+import ui.game.GameUtils;
 
 @SuppressWarnings("serial")
 public class MenuMulti extends Menu {
@@ -33,20 +36,24 @@ public class MenuMulti extends Menu {
 	private JLabel enterPortJoin;
 	private JTextField portJoin;
 	private JButton joinServer;
+	public static JTextField hostName; // TODO not public static
+	public static JTextField joinName; // TODO not public static
 
 	public MenuMulti() {
 		setTitle("Online Game");
 		
 		ButtonGroup hostOrJoin = new ButtonGroup();
 		
-		hostGameRadio = new JRadioButton("Host Game");
+		hostGameRadio = new JRadioButton("Host Game as");
 		hostGameRadio.setFocusPainted(false);
 		hostOrJoin.add(hostGameRadio);
 		hostGameRadio.setFont(new Font("Century Gothic", Font.BOLD, 15));
-		hostGameRadio.setBounds(17, 19, 110, 20);
+		hostGameRadio.setBounds(17, 19, 130, 20);
 		hostGameRadio.setContentAreaFilled(false);
 		hostGameRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				hostName.setEnabled(true);
+				joinName.setEnabled(false);
 				portHost.setEnabled(true);
 				startFirstCheckbox.setEnabled(true);
 				createServer.setEnabled(true);
@@ -56,14 +63,16 @@ public class MenuMulti extends Menu {
 			}
 		});
 		
-		joinGameRadio = new JRadioButton("Join Game");
+		joinGameRadio = new JRadioButton("Join Game as");
 		joinGameRadio.setFocusPainted(false);
 		hostOrJoin.add(joinGameRadio);
 		joinGameRadio.setFont(new Font("Century Gothic", Font.BOLD, 15));
-		joinGameRadio.setBounds(17, 169, 110, 20);
+		joinGameRadio.setBounds(17, 169, 130, 20);
 		joinGameRadio.setContentAreaFilled(false);
 		joinGameRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				hostName.setEnabled(false);
+				joinName.setEnabled(true);
 				portHost.setEnabled(false);
 				startFirstCheckbox.setEnabled(false);
 				createServer.setEnabled(false);
@@ -72,6 +81,22 @@ public class MenuMulti extends Menu {
 				joinServer.setEnabled(true);
 			}
 		});
+
+		hostName = new JTextField();
+		hostName.setOpaque(false);
+		hostName.setFont(new Font("Century Gothic", Font.PLAIN, 15));
+		hostName.setEnabled(false);
+		hostName.setColumns(10);
+		hostName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		hostName.setBounds(143, 19, 110, 20);
+
+		joinName = new JTextField();
+		joinName.setOpaque(false);
+		joinName.setFont(new Font("Century Gothic", Font.PLAIN, 15));
+		joinName.setEnabled(false);
+		joinName.setColumns(10);
+		joinName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		joinName.setBounds(143, 171, 110, 20);
 		
 		enterPortHost = new JLabel("Enter port:");
 		enterPortHost.setBounds(37, 46, 220, 20);
@@ -79,6 +104,7 @@ public class MenuMulti extends Menu {
 		enterPortHost.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 
 		portHost = new JTextField();
+		portHost.setHorizontalAlignment(SwingConstants.CENTER);
 		portHost.setBounds(37, 77, 220, 20);
 		portHost.setText("8080");
 		portHost.setFont(new Font("Century Gothic", Font.PLAIN, 13));
@@ -100,15 +126,22 @@ public class MenuMulti extends Menu {
 		createServer = new JButton("");
 		createServer.setBounds(177, 108, 80, 40);
 		createServer.setEnabled(false);
-		createServer.setIcon(new ImageIcon("bgTheme/multi/play.png"));
-		createServer.setPressedIcon(new ImageIcon("bgTheme/multi/playPressed.png"));
+		createServer.setIcon(new ImageIcon(Image.getPlaysmall()));
+		createServer.setPressedIcon(new ImageIcon(Image.getPlaysmallpressed()));
 		createServer.setContentAreaFilled(false);
 		createServer.setBorderPainted(false);
 		createServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				dispose();
+				// set name
+				if (startFirstCheckbox.isSelected()) 
+					GameUtils.setPlayerX(hostName.getText());
+				else
+					GameUtils.setPlayerO(hostName.getText());
+				
 				new Thread(new Server(Integer.parseInt(portHost.getText()))).start();
+				IOUtils.setServerFirst(startFirstCheckbox.isSelected());
 			}
 		});
 		
@@ -118,6 +151,7 @@ public class MenuMulti extends Menu {
 		enterIP.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		
 		IP = new JTextField();
+		IP.setHorizontalAlignment(SwingConstants.CENTER);
 		IP.setBounds(37, 227, 220, 20);
 		IP.setText("127.0.0.1");
 		IP.setFont(new Font("Century Gothic", Font.PLAIN, 13));
@@ -132,6 +166,7 @@ public class MenuMulti extends Menu {
 		enterPortJoin.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		
 		portJoin = new JTextField();
+		portJoin.setHorizontalAlignment(SwingConstants.CENTER);
 		portJoin.setBounds(37, 289, 220, 20);
 		portJoin.setText("8080");
 		portJoin.setFont(new Font("Century Gothic", Font.PLAIN, 14));
@@ -143,8 +178,8 @@ public class MenuMulti extends Menu {
 		joinServer = new JButton("");
 		joinServer.setBounds(177, 320, 80, 40);
 		joinServer.setEnabled(false);
-		joinServer.setIcon(new ImageIcon("bgTheme/multi/play.png"));
-		joinServer.setPressedIcon(new ImageIcon("bgTheme/multi/playPressed.png"));
+		joinServer.setIcon(new ImageIcon(Image.getPlaysmall()));
+		joinServer.setPressedIcon(new ImageIcon(Image.getPlaysmallpressed()));
 		joinServer.setContentAreaFilled(false);
 		joinServer.setBorderPainted(false);
 		joinServer.addActionListener(new ActionListener() {
@@ -157,6 +192,8 @@ public class MenuMulti extends Menu {
 		
 		panel.add(hostGameRadio);
 		panel.add(joinGameRadio);
+		panel.add(hostName);
+		panel.add(joinName);
 		panel.add(enterPortHost);
 		panel.add(portHost);
 		panel.add(createServer);

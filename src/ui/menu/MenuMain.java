@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import ui.Image;
+
 @SuppressWarnings("serial")
 public class MenuMain extends Menu {
 
@@ -19,14 +21,14 @@ public class MenuMain extends Menu {
 		panel.add(ticTacToeLabel);
 		ticTacToeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		ticTacToeLabel.setBounds(38, 11, 220, 80);
-		ticTacToeLabel.setIcon(new ImageIcon("bgTheme/main/ticTacToe.png"));
+		ticTacToeLabel.setIcon(new ImageIcon(Image.getTttmain()));
 
 		JButton singlePlayer = new JButton("");
 		panel.add(singlePlayer);
 		singlePlayer.setBounds(38, 91, 220, 80);
-		singlePlayer.setIcon(new ImageIcon("bgTheme/main/single.png"));
-		singlePlayer.setPressedIcon(new ImageIcon("bgTheme/main/singlePressed.png"));
-		singlePlayer.setRolloverIcon(new ImageIcon("bgTheme/main/singleHover.png"));
+		singlePlayer.setIcon(new ImageIcon(Image.getSingleplayer()));
+		singlePlayer.setPressedIcon(new ImageIcon(Image.getSingleplayerpressed()));
+		singlePlayer.setRolloverIcon(new ImageIcon(Image.getSingleplayerhover()));
 		singlePlayer.setContentAreaFilled(false); // remove def img
 		singlePlayer.setBorderPainted(false); // remove borders of the button
 		singlePlayer.addActionListener(new ActionListener() {
@@ -41,9 +43,9 @@ public class MenuMain extends Menu {
 		JButton multiplayer = new JButton("");
 		panel.add(multiplayer);
 		multiplayer.setBounds(38, 182, 220, 80);
-		multiplayer.setIcon(new ImageIcon("bgTheme/main/multi.png"));
-		multiplayer.setPressedIcon(new ImageIcon("bgTheme/main/multiPressed.png"));
-		multiplayer.setRolloverIcon(new ImageIcon("bgTheme/main/multiHover.png"));
+		multiplayer.setIcon(new ImageIcon(Image.getMultiplayer()));
+		multiplayer.setPressedIcon(new ImageIcon(Image.getMultiplayerpressed()));
+		multiplayer.setRolloverIcon(new ImageIcon(Image.getMultiplayerhover()));
 		multiplayer.setContentAreaFilled(false); // remove def img
 		multiplayer.setBorderPainted(false); // remove borders of the button
 		multiplayer.addActionListener(new ActionListener() {
@@ -58,9 +60,9 @@ public class MenuMain extends Menu {
 		JButton couchCoop = new JButton("");
 		panel.add(couchCoop);
 		couchCoop.setBounds(38, 273, 220, 80);
-		couchCoop.setIcon(new ImageIcon("bgTheme/main/couch.png"));
-		couchCoop.setPressedIcon(new ImageIcon("bgTheme/main/couchPressed.png"));
-		couchCoop.setRolloverIcon(new ImageIcon("bgTheme/main/couchHover.png"));
+		couchCoop.setIcon(new ImageIcon(Image.getCouchcoop()));
+		couchCoop.setPressedIcon(new ImageIcon(Image.getCouchcooppressed()));
+		couchCoop.setRolloverIcon(new ImageIcon(Image.getCouchcoophover()));
 		couchCoop.setContentAreaFilled(false); // remove def img
 		couchCoop.setBorderPainted(false); // remove borders of the button
 		couchCoop.addActionListener(new ActionListener() {

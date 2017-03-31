@@ -9,6 +9,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 
 import ui.game.GameMulti;
+import ui.game.GameUtils;
+import ui.menu.MenuMulti;
 
 public class Server implements Runnable {
 
@@ -16,9 +18,8 @@ public class Server implements Runnable {
 	protected ServerSocket serverSocket;
 	protected Socket clientSocket;
 	protected Thread runningThread;
+	
 
-	GameMulti p;
-	JFrame f;
 
 	public Server(int port) {
 		this.port = port;
@@ -53,14 +54,23 @@ public class Server implements Runnable {
 	}
 
 	private void setupStreams() throws IOException {
-		IOUtils.output = new DataOutputStream(clientSocket.getOutputStream());
-		IOUtils.output.flush();
-		IOUtils.input = new DataInputStream(clientSocket.getInputStream());
+		IOUtils.setOutput(new DataOutputStream(clientSocket.getOutputStream()));
+		IOUtils.getOutput().flush();
+		IOUtils.setInput(new DataInputStream(clientSocket.getInputStream()));
 	}
 
 	private void whileConnected() throws IOException {
+		// initialize players and turns
+		IOUtils.sendFirst(IOUtils.isServerFirst());
+		IOUtils.sendName(GameUtils.getPlayerX() != null ? GameUtils.getPlayerX() : GameUtils.getPlayerO());
+		if (GameUtils.getPlayerX() == null)
+			GameUtils.setPlayerX(IOUtils.receiveName());
+		else
+			GameUtils.setPlayerO(IOUtils.receiveName());
+		
+		// initialize game
 		JFrame frame = new JFrame("Multiplayer game as Server");
-		GameMulti game = new GameMulti(true);
+		GameMulti game = new GameMulti(IOUtils.isServerFirst());
 		frame.setContentPane(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -76,8 +86,8 @@ public class Server implements Runnable {
 
 	public void closeConnection() {
 		try {
-			IOUtils.output.close(); // Closes the output path to the client
-			IOUtils.input.close(); // Closes the input path to the server
+			IOUtils.getOutput().close(); // Closes the output path to the client
+			IOUtils.getInput().close(); // Closes the input path to the server
 			clientSocket.close(); // Closes the connection with the client
 		} catch (IOException ioException) {
 			ioException.printStackTrace();

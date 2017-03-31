@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ui.Image;
 import ui.game.GameUtils;
 
 /**
@@ -15,10 +16,7 @@ import ui.game.GameUtils;
 public class Board {
 	// package access TODO make setters and getters
 	private Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell
-							// instances
-	private String gridPic = "grid450.png";
-
-	/** Constructor to initialize the game board */
+							/** Constructor to initialize the game board */
 	public Board() {
 		setCells(new Cell[GameUtils.getRows()][GameUtils.getCols()]); // allocate the
 															// array
@@ -74,7 +72,7 @@ public class Board {
 
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File(gridPic));
+			img = ImageIO.read(new File(Image.getGrid()));
 		} catch (IOException e) {
 			// TODO
 		}

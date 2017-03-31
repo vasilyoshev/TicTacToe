@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ui.Image;
 import ui.game.GameUtils;
 
 /**
@@ -16,8 +17,6 @@ public class Cell {
 	// Package access
 	private Seed content; // Seed.EMPTY, Seed.CROSS, Seed.NOUGHT
 	private int row, col; // row and column of this cell
-	private String crossImg = "x150.png";
-	private String noughtImg = "o150.png";
 
 	/** Constructor to initialize this cell with the specified row and col */
 	public Cell(int row, int col) {
@@ -39,13 +38,13 @@ public class Cell {
 		BufferedImage img = null;
 		if (content == Seed.CROSS) {
 			try {
-				img = ImageIO.read(new File(crossImg));
+				img = ImageIO.read(new File(Image.getCrossImg()));
 			} catch (IOException e) {
 				System.out.println("Cannot find Cross image.");
 			}
 		} else if (content == Seed.NOUGHT) {
 			try {
-				img = ImageIO.read(new File(noughtImg));
+				img = ImageIO.read(new File(Image.getNoughtImg()));
 			} catch (IOException e) {
 				System.out.println("Cannot find Nought image.");
 			}

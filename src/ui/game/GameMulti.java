@@ -14,6 +14,7 @@ public class GameMulti extends Game {
 		super();
 		GameUtils.setMyMove(isMyTurn);
 		mySeed = isMyTurn ? Seed.CROSS : Seed.NOUGHT;
+		newGame.setEnabled(false);
 	}
 
 	@Override

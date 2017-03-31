@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import ui.Image;
 import ui.game.GameSingle;
 import ui.game.GameUtils;
 
@@ -59,9 +60,9 @@ public class MenuSingle extends Menu {
 
 		play = new JButton("");
 		play.setBounds(38, 253, 220, 80);
-		play.setIcon(new ImageIcon("bgTheme/single/play.png"));
-		play.setPressedIcon(new ImageIcon("bgTheme/single/playPressed.png"));
-		play.setRolloverIcon(new ImageIcon("bgTheme/single/playHover.png"));
+		play.setIcon(new ImageIcon(Image.getPlaylarge()));
+		play.setPressedIcon(new ImageIcon(Image.getPlaylargepressed()));
+		play.setRolloverIcon(new ImageIcon(Image.getPlaylargehover()));
 		play.setContentAreaFilled(false);
 		play.setBorderPainted(false);
 		play.addActionListener(new ActionListener() {

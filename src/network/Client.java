@@ -8,6 +8,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 
 import ui.game.GameMulti;
+import ui.game.GameUtils;
+import ui.menu.MenuMulti;
 
 public class Client implements Runnable {
 	protected String IP;
@@ -19,8 +21,8 @@ public class Client implements Runnable {
 		this.IP = IP;
 		this.port = port;
 		socket = null;
-		IOUtils.input = null;
-		IOUtils.output = null;
+		IOUtils.setInput(null);
+		IOUtils.setOutput(null);
 		runningThread = null;
 	}
 
@@ -45,14 +47,22 @@ public class Client implements Runnable {
 	}
 
 	private void setupStreams() throws IOException {
-		IOUtils.output = new DataOutputStream(socket.getOutputStream());
-		IOUtils.output.flush();
-		IOUtils.input = new DataInputStream(socket.getInputStream());
+		IOUtils.setOutput(new DataOutputStream(socket.getOutputStream()));
+		IOUtils.getOutput().flush();
+		IOUtils.setInput(new DataInputStream(socket.getInputStream()));
 	}
 
 	private void whileConnected() throws IOException {
+		// initialize players and turns
+		boolean isFirst = !IOUtils.receiveFirst();
+		String opponentName = IOUtils.receiveName();
+		IOUtils.sendName(MenuMulti.joinName.getText());
+		GameUtils.setPlayerX(isFirst ? MenuMulti.joinName.getText() : opponentName);
+		GameUtils.setPlayerO(isFirst ? opponentName : MenuMulti.joinName.getText());
+
+		// initialize turns
 		JFrame frame = new JFrame("Multiplayer game as Client");
-		GameMulti game = new GameMulti(false);
+		GameMulti game = new GameMulti(isFirst);
 		frame.setContentPane(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -68,8 +78,8 @@ public class Client implements Runnable {
 
 	public void closeConnection() {
 		try {
-			IOUtils.output.close(); // Closes the output path to the client
-			IOUtils.input.close(); // Closes the input path to the server
+			IOUtils.getOutput().close(); // Closes the output path to the client
+			IOUtils.getInput().close(); // Closes the input path to the server
 			socket.close(); // Closes the connection with the client
 		} catch (IOException ioException) {
 			ioException.printStackTrace();

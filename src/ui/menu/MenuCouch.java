@@ -13,15 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import ui.Image;
 import ui.game.GameCouch;
 import ui.game.GameUtils;
 
 @SuppressWarnings("serial")
 public class MenuCouch extends Menu {
 	private JLabel player1Label;
-	private JTextField player1TextField;
+	private JTextField player1Name;
 	private JLabel player2Label;
-	private JTextField player2TextField;
+	private JTextField player2Name;
 	private JButton play;
 
 	public MenuCouch() {
@@ -32,38 +33,39 @@ public class MenuCouch extends Menu {
 		player1Label.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		player1Label.setBounds(38, 38, 220, 20);
 
-		player1TextField = new JTextField();
-		player1TextField.setFont(new Font("Century Gothic", Font.PLAIN, 13));
-		player1TextField.setBounds(38, 69, 220, 20);
-		player1TextField.setColumns(10);
-		player1TextField.setOpaque(false);
-		player1TextField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		player1Name = new JTextField();
+		player1Name.setFont(new Font("Century Gothic", Font.PLAIN, 13));
+		player1Name.setBounds(38, 69, 220, 20);
+		player1Name.setColumns(10);
+		player1Name.setOpaque(false);
+		player1Name.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
 		player2Label = new JLabel("Player 2 (O):");
 		player2Label.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		player2Label.setHorizontalAlignment(SwingConstants.CENTER);
 		player2Label.setBounds(28, 128, 220, 20);
 
-		player2TextField = new JTextField();
-		player2TextField.setFont(new Font("Century Gothic", Font.PLAIN, 13));
-		player2TextField.setBounds(38, 157, 220, 20);
-		player2TextField.setColumns(10);
-		player2TextField.setOpaque(false);
-		player2TextField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		player2Name = new JTextField();
+		player2Name.setFont(new Font("Century Gothic", Font.PLAIN, 13));
+		player2Name.setBounds(38, 157, 220, 20);
+		player2Name.setColumns(10);
+		player2Name.setOpaque(false);
+		player2Name.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
 		play = new JButton("");
 		play.setBounds(38, 253, 220, 80);
 		play.setFont(new Font("Century Gothic", Font.PLAIN, 38));
-		play.setIcon(new ImageIcon("bgTheme/couch/play.png"));
-		play.setPressedIcon(new ImageIcon("bgTheme/couch/playPressed.png"));
+		play.setIcon(new ImageIcon(Image.getPlaylarge()));
+		play.setPressedIcon(new ImageIcon(Image.getPlaylargepressed()));
+		play.setRolloverIcon(new ImageIcon(Image.getPlaylargehover()));
 		play.setContentAreaFilled(false); // remove def img, leave only icon
 		play.setBorderPainted(false); // remove borders of the button
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				dispose();
-				GameUtils.setPlayerX(player1TextField.getText());
-				GameUtils.setPlayerO(player2TextField.getText());
+				GameUtils.setPlayerX(player1Name.getText());
+				GameUtils.setPlayerO(player2Name.getText());
 				JFrame frame = new JFrame("Couch Co-op");
 				frame.setContentPane(new GameCouch());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,9 +77,9 @@ public class MenuCouch extends Menu {
 		});
 
 		panel.add(player1Label);
-		panel.add(player1TextField);
+		panel.add(player1Name);
 		panel.add(player2Label);
-		panel.add(player2TextField);
+		panel.add(player2Name);
 		panel.add(play);
 	}
 }

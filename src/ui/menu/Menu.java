@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ui.Image;
+
 @SuppressWarnings("serial")
 public abstract class Menu extends JFrame {
 
@@ -28,7 +30,7 @@ public abstract class Menu extends JFrame {
 
 				BufferedImage img = null;
 				try {
-					img = ImageIO.read(new File("menubg.png"));
+					img = ImageIO.read(new File(Image.getMenubg()));
 				} catch (IOException e) {
 					// TODO
 				}
