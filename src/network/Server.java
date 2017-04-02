@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 
 import ui.game.GameMulti;
 import ui.game.GameUtils;
-import ui.menu.MenuMulti;
 
 public class Server implements Runnable {
 
@@ -18,8 +17,6 @@ public class Server implements Runnable {
 	protected ServerSocket serverSocket;
 	protected Socket clientSocket;
 	protected Thread runningThread;
-	
-
 
 	public Server(int port) {
 		this.port = port;
@@ -67,7 +64,7 @@ public class Server implements Runnable {
 			GameUtils.setPlayerX(IOUtils.receiveName());
 		else
 			GameUtils.setPlayerO(IOUtils.receiveName());
-		
+
 		// initialize game
 		JFrame frame = new JFrame("Multiplayer game as Server");
 		GameMulti game = new GameMulti(IOUtils.isServerFirst());

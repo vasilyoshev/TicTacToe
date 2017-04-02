@@ -212,7 +212,7 @@ public final class GameUtils {
 	 * @param isMyMove
 	 *            the isMyMove to set
 	 */
-	protected static void setMyMove(boolean isMyMove) {
+	protected static void setIsMyMove(boolean isMyMove) {
 		GameUtils.isMyMove = isMyMove;
 	}
 }

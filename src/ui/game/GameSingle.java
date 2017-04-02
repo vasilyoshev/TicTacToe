@@ -9,7 +9,6 @@ import javax.swing.Timer;
 import AI.AIPlayer;
 import AI.AIPlayerTableLookup;
 import logic.Seed;
-import logic.State;
 
 @SuppressWarnings("serial")
 public class GameSingle extends Game {
@@ -19,7 +18,7 @@ public class GameSingle extends Game {
 
 	public GameSingle() {
 		super();
-		GameUtils.setMyMove(playerIsX ? true : false);
+		GameUtils.setIsMyMove(playerIsX ? true : false);
 		initAI(); // TODO make initOpponent in Multi
 	}
 
@@ -63,7 +62,7 @@ public class GameSingle extends Game {
 	private void moveAI() {
 		// sets myMove to false so player can't move while AI is making it's
 		// move
-		GameUtils.setMyMove(false);
+		GameUtils.setIsMyMove(false);
 		Timer timer = new Timer(700, new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				int[] computerMove = aiPlayer.move();
@@ -71,7 +70,7 @@ public class GameSingle extends Game {
 				GameUtils.setCol(computerMove[1]);
 				GameUtils.getBoard().getCells()[GameUtils.getRow()][GameUtils.getCol()]
 						.setContent(GameUtils.getCurrentPlayer());
-				GameUtils.setMyMove(true);
+				GameUtils.setIsMyMove(true);
 				updateGame(GameUtils.getCurrentPlayer(), GameUtils.getRow(), GameUtils.getCol());
 				repaint();
 			}

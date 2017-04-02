@@ -12,7 +12,7 @@ public class GameMulti extends Game {
 
 	public GameMulti(boolean isMyTurn) {
 		super();
-		GameUtils.setMyMove(isMyTurn);
+		GameUtils.setIsMyMove(isMyTurn);
 		mySeed = isMyTurn ? Seed.CROSS : Seed.NOUGHT;
 		newGame.setEnabled(false);
 	}
@@ -40,7 +40,7 @@ public class GameMulti extends Game {
 		if (GameUtils.isMyMove())
 			IOUtils.sendMove(GameUtils.getRow(), GameUtils.getCol());
 		super.updateGame(theSeed, row, col);
-		GameUtils.setMyMove((mySeed == GameUtils.getCurrentPlayer()) ? true : false);
+		GameUtils.setIsMyMove((mySeed == GameUtils.getCurrentPlayer()) ? true : false);
 	}
 
 	@Override

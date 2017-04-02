@@ -29,11 +29,13 @@ public class MenuCouch extends Menu {
 		setTitle("Couch Co-Op");
 
 		player1Label = new JLabel("Player 1 (X):");
+		player1Label.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		player1Label.setHorizontalAlignment(SwingConstants.CENTER);
 		player1Label.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		player1Label.setBounds(38, 38, 220, 20);
 
 		player1Name = new JTextField();
+		player1Name.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		player1Name.setFont(new Font("Century Gothic", Font.PLAIN, 13));
 		player1Name.setBounds(38, 69, 220, 20);
 		player1Name.setColumns(10);
@@ -41,11 +43,13 @@ public class MenuCouch extends Menu {
 		player1Name.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
 		player2Label = new JLabel("Player 2 (O):");
+		player2Label.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		player2Label.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		player2Label.setHorizontalAlignment(SwingConstants.CENTER);
 		player2Label.setBounds(28, 128, 220, 20);
 
 		player2Name = new JTextField();
+		player2Name.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		player2Name.setFont(new Font("Century Gothic", Font.PLAIN, 13));
 		player2Name.setBounds(38, 157, 220, 20);
 		player2Name.setColumns(10);
@@ -57,7 +61,7 @@ public class MenuCouch extends Menu {
 		play.setFont(new Font("Century Gothic", Font.PLAIN, 38));
 		play.setIcon(new ImageIcon(Image.getPlaylarge()));
 		play.setPressedIcon(new ImageIcon(Image.getPlaylargepressed()));
-		play.setRolloverIcon(new ImageIcon(Image.getPlaylargehover()));
+		play.setRolloverIcon(new ImageIcon(Image.getPlayLargeHover()));
 		play.setContentAreaFilled(false); // remove def img, leave only icon
 		play.setBorderPainted(false); // remove borders of the button
 		play.addActionListener(new ActionListener() {

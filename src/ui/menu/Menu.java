@@ -30,7 +30,7 @@ public abstract class Menu extends JFrame {
 
 				BufferedImage img = null;
 				try {
-					img = ImageIO.read(new File(Image.getMenubg()));
+					img = ImageIO.read(new File(Image.getMenuBG()));
 				} catch (IOException e) {
 					// TODO
 				}

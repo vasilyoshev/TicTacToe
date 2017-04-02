@@ -24,28 +24,34 @@ public class MenuSingle extends Menu {
 	private JTextField computerTextField;
 	private JButton play;
 	private JCheckBox compStartsCheckBox;
+	JLabel playerLabel;
+	private JLabel computerLabel;
 
 	public MenuSingle() {
 		setTitle("Singleplayer");
 
-		JLabel playerLabel = new JLabel("Player (X):");
+		playerLabel = new JLabel("Player (X):");
+		playerLabel.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		playerLabel.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		playerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		playerLabel.setBounds(38, 38, 220, 20);
 
 		playerTextField = new JTextField();
+		playerTextField.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		playerTextField.setFont(new Font("Century Gothic", Font.PLAIN, 13));
 		playerTextField.setBounds(38, 69, 220, 20);
 		playerTextField.setColumns(10);
 		playerTextField.setOpaque(false);
 		playerTextField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
-		JLabel computerLabel = new JLabel("Computer (O):");
+		computerLabel = new JLabel("Computer (O):");
+		computerLabel.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		computerLabel.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		computerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		computerLabel.setBounds(38, 128, 220, 20);
 
 		computerTextField = new JTextField("Jarvis");
+		computerTextField.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		computerTextField.setFont(new Font("Century Gothic", Font.PLAIN, 13));
 		computerTextField.setBounds(38, 157, 220, 20);
 		computerTextField.setColumns(10);
@@ -53,6 +59,7 @@ public class MenuSingle extends Menu {
 		computerTextField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
 		compStartsCheckBox = new JCheckBox("Computer starts first");
+		compStartsCheckBox.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		compStartsCheckBox.setFont(new Font("Century Gothic", Font.ITALIC, 11));
 		compStartsCheckBox.setBounds(38, 184, 220, 20);
 		compStartsCheckBox.setContentAreaFilled(false);
@@ -62,7 +69,7 @@ public class MenuSingle extends Menu {
 		play.setBounds(38, 253, 220, 80);
 		play.setIcon(new ImageIcon(Image.getPlaylarge()));
 		play.setPressedIcon(new ImageIcon(Image.getPlaylargepressed()));
-		play.setRolloverIcon(new ImageIcon(Image.getPlaylargehover()));
+		play.setRolloverIcon(new ImageIcon(Image.getPlayLargeHover()));
 		play.setContentAreaFilled(false);
 		play.setBorderPainted(false);
 		play.addActionListener(new ActionListener() {

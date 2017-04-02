@@ -1,5 +1,6 @@
 package ui.game;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -49,6 +50,8 @@ public abstract class Game extends JPanel {
 
 		changeTheme = new JButton("");
 		changeTheme.setIcon(new ImageIcon(Image.getTheme()));
+		changeTheme.setRolloverIcon(new ImageIcon(Image.getThemeHover()));
+		changeTheme.setPressedIcon(new ImageIcon(Image.getThemePressed()));
 		changeTheme.setBounds(464, 291, 220, 65);
 		changeTheme.setContentAreaFilled(false);
 		changeTheme.setBorderPainted(false);
@@ -61,7 +64,9 @@ public abstract class Game extends JPanel {
 		});
 
 		newGame = new JButton("");
-		newGame.setIcon(new ImageIcon(Image.getNewgame()));
+		newGame.setIcon(new ImageIcon(Image.getNewGame()));
+		newGame.setRolloverIcon(new ImageIcon(Image.getNewGameHover()));
+		newGame.setPressedIcon(new ImageIcon(Image.getNewGamePressed()));
 		newGame.setBounds(464, 374, 220, 65);
 		newGame.setContentAreaFilled(false); // remove def img, leave only icon
 		newGame.setBorderPainted(false); // remove borders of the button
@@ -76,12 +81,14 @@ public abstract class Game extends JPanel {
 		names.setVerticalAlignment(SwingConstants.TOP);
 		names.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		names.setBounds(464, 127, 220, 158);
+		names.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		add(names);
 
 		result = new JLabel("<html>0<br><br>0</html>", SwingConstants.RIGHT);
 		result.setVerticalAlignment(SwingConstants.TOP);
 		result.setFont(new Font("Century Gothic", Font.PLAIN, 30));
 		result.setBounds(604, 127, 80, 158);
+		result.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		add(result);
 
 		// This JPanel fires MouseEvent
@@ -153,31 +160,32 @@ public abstract class Game extends JPanel {
 	public void updateGame(Seed theSeed, int row, int col) {
 		if (GameUtils.getBoard().hasWon(theSeed, row, col)) { // check for win
 			GameUtils.setCurrentState((theSeed == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON);
-			
+
 			end = new JDialog();
 			end.setResizable(false);
-			end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
-			// removes frame
-			end.setUndecorated(true);
-			
+			end.setUndecorated(true); // removes title bar
+			end.setBackground(new Color(0, 0, 0, 0)); // makes frame transparent
+
 			if (GameUtils.getCurrentState() == State.CROSS_WON) {
-				end.add(new JLabel(new ImageIcon(Image.getCouchcoop()))); 
+				end.add(new JLabel(new ImageIcon(Image.getxWins())));
 				// TODO add X won
 				end.pack();
+				end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
 				end.setVisible(true);
-				
+
 				GameUtils.setResultX(GameUtils.getResultX() + 1);
 				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			} else {
-				end.add(new JLabel(new ImageIcon(Image.getCouchcoop()))); 
+				end.add(new JLabel(new ImageIcon(Image.getoWins())));
 				// TODO add O won
 				end.pack();
+				end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
 				end.setVisible(true);
-				
+
 				GameUtils.setResultO(GameUtils.getResultO() + 1);
 				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			}
-			
+
 			Timer timer = new Timer(1000, new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					end.dispose();
@@ -191,13 +199,19 @@ public abstract class Game extends JPanel {
 			GameUtils.setCurrentState(State.DRAW);
 			end = new JDialog();
 			end.setResizable(false);
-			end.setLocation(460, 330);
 			end.setUndecorated(true);
-			end.add(new JLabel(new ImageIcon(Image.getCouchcoop()))); 
-			// TODO add draw
+			end.add(new JLabel(new ImageIcon(Image.getDraw())));
 			end.pack();
+			end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
 			end.setVisible(true);
-			// TODO display DRAW message
+			Timer timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					end.dispose();
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
+
 			initGame();
 		} else { // PLAYING
 			// Switch player
@@ -214,9 +228,10 @@ public abstract class Game extends JPanel {
 		// add background image
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File(Image.getGamebg()));
+			img = ImageIO.read(new File(Image.getGameBG()));
 		} catch (IOException e) {
 			// TODO
+			System.out.println("No image.");
 		}
 		g.drawImage(img, 0, 0, null);
 
