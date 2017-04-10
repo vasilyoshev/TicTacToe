@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import ui.Image;
 import ui.game.GameCouch;
@@ -70,13 +71,16 @@ public class MenuCouch extends Menu {
 				dispose();
 				GameUtils.setPlayerX(player1Name.getText());
 				GameUtils.setPlayerO(player2Name.getText());
+
 				JFrame frame = new JFrame("Couch Co-op");
 				frame.setContentPane(new GameCouch());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setResizable(false);
 				frame.pack();
-				frame.setLocationRelativeTo(null); // center the application
+				frame.setLocationRelativeTo(null); // center the
+													// application
 				frame.setVisible(true); // show it
+
 			}
 		});
 

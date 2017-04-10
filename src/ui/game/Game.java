@@ -200,6 +200,7 @@ public abstract class Game extends JPanel {
 			end = new JDialog();
 			end.setResizable(false);
 			end.setUndecorated(true);
+			end.setBackground(new Color(0, 0, 0, 0)); // makes frame transparent
 			end.add(new JLabel(new ImageIcon(Image.getDraw())));
 			end.pack();
 			end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
