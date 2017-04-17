@@ -16,14 +16,18 @@ public abstract class Menu extends JFrame {
 
 	protected JPanel panel;
 
+	/**
+	 * Default constructor for setting common rules for all menu frames.
+	 */
 	public Menu() {
-		setBounds(100, 100, 300, 400);
+		setBounds(100, 100, 300, 400); // set size of menu frame
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null); // center the application
-		setVisible(true);
+		setVisible(true); // show the window
 
 		panel = new JPanel() {
+			// adds BG image to the frame
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -39,6 +43,7 @@ public abstract class Menu extends JFrame {
 			}
 		};
 		add(panel);
+		// use absolute layout
 		panel.setLayout(null);
 	}
 }

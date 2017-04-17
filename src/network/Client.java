@@ -17,6 +17,9 @@ public class Client implements Runnable {
 	public Socket socket;
 	protected Thread runningThread;
 
+	/**
+	 * Default constructor.
+	 */
 	public Client(String IP, int port) {
 		this.IP = IP;
 		this.port = port;
@@ -27,7 +30,7 @@ public class Client implements Runnable {
 	}
 
 	public void run() {
-		synchronized (this) { // TODO do I need this?
+		synchronized (this) {
 			runningThread = Thread.currentThread();
 		}
 
@@ -42,16 +45,25 @@ public class Client implements Runnable {
 		}
 	}
 
+	/**
+	 * Initializes new socket with given IP and port.
+	 */
 	private void connectToServer() throws IOException {
 		socket = new Socket(IP, port);
 	}
 
+	/**
+	 * Sets up input and output streams.
+	 */
 	private void setupStreams() throws IOException {
 		IOUtils.setOutput(new DataOutputStream(socket.getOutputStream()));
 		IOUtils.getOutput().flush();
 		IOUtils.setInput(new DataInputStream(socket.getInputStream()));
 	}
 
+	/**
+	 * Implements communication between server and client.
+	 */
 	private void whileConnected() throws IOException {
 		// initialize players and turns
 		boolean isFirst = !IOUtils.receiveFirst();
@@ -69,13 +81,16 @@ public class Client implements Runnable {
 		frame.pack();
 		frame.setLocationRelativeTo(null); // center the application
 		frame.setVisible(true);
-		
+
 		while (socket.isConnected()) {
 			int[] move = IOUtils.receiveMove();
 			game.receiveMove(move);
 		}
 	}
 
+	/**
+	 * Closes streams and socket.
+	 */
 	public void closeConnection() {
 		try {
 			IOUtils.getOutput().close(); // Closes the output path to the client

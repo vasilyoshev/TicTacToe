@@ -36,29 +36,35 @@ public class MenuMulti extends Menu {
 	private JLabel enterPortJoin;
 	private JTextField portJoin;
 	private JButton joinServer;
-	public static JTextField hostName; // TODO not public static
-	public static JTextField joinName; // TODO not public static
 
+	// fields are public static since they are used in the network package
+	public static JTextField hostName;
+	public static JTextField joinName;
+
+	/**
+	 * Default constructor where elements of the frame are created.
+	 */
 	public MenuMulti() {
-		setTitle("Online Game");
+		setTitle("Multiplayer");
 
 		ButtonGroup hostOrJoin = new ButtonGroup();
 
+		// Creates Host Game radio button
 		hostGameRadio = new JRadioButton("Host Game as");
 		hostGameRadio.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		hostGameRadio.setFocusPainted(false);
-		hostOrJoin.add(hostGameRadio);
 		hostGameRadio.setFont(new Font("Century Gothic", Font.BOLD, 15));
 		hostGameRadio.setBounds(17, 19, 130, 20);
 		hostGameRadio.setContentAreaFilled(false);
+		hostOrJoin.add(hostGameRadio); // add to group
 		hostGameRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				hostName.setEnabled(true);
-				joinName.setEnabled(false);
 				enterPortHost.setEnabled(true);
 				portHost.setEnabled(true);
 				startFirstCheckbox.setEnabled(true);
 				createServer.setEnabled(true);
+				joinName.setEnabled(false);
 				IP.setEnabled(false);
 				portJoin.setEnabled(false);
 				joinServer.setEnabled(false);
@@ -67,21 +73,22 @@ public class MenuMulti extends Menu {
 			}
 		});
 
+		// Creates Join Game radio button
 		joinGameRadio = new JRadioButton("Join Game as");
 		joinGameRadio.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		joinGameRadio.setFocusPainted(false);
-		hostOrJoin.add(joinGameRadio);
 		joinGameRadio.setFont(new Font("Century Gothic", Font.BOLD, 15));
 		joinGameRadio.setBounds(17, 169, 130, 20);
 		joinGameRadio.setContentAreaFilled(false);
+		hostOrJoin.add(joinGameRadio); // add to group
 		joinGameRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				hostName.setEnabled(false);
-				joinName.setEnabled(true);
 				enterPortHost.setEnabled(false);
 				portHost.setEnabled(false);
 				startFirstCheckbox.setEnabled(false);
 				createServer.setEnabled(false);
+				joinName.setEnabled(true);
 				IP.setEnabled(true);
 				portJoin.setEnabled(true);
 				joinServer.setEnabled(true);
@@ -90,6 +97,7 @@ public class MenuMulti extends Menu {
 			}
 		});
 
+		// Text field for the name of the server
 		hostName = new JTextField();
 		hostName.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		hostName.setOpaque(false);
@@ -99,6 +107,7 @@ public class MenuMulti extends Menu {
 		hostName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		hostName.setBounds(143, 19, 110, 20);
 
+		// Text field for the name of the client
 		joinName = new JTextField();
 		joinName.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		joinName.setOpaque(false);
@@ -108,6 +117,7 @@ public class MenuMulti extends Menu {
 		joinName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		joinName.setBounds(143, 171, 110, 20);
 
+		// Label for entering port for server
 		enterPortHost = new JLabel("Enter port:");
 		enterPortHost.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		enterPortHost.setBounds(37, 46, 220, 20);
@@ -115,6 +125,7 @@ public class MenuMulti extends Menu {
 		enterPortHost.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		enterPortHost.setEnabled(false);
 
+		// Text field for entering port for server
 		portHost = new JTextField();
 		portHost.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		portHost.setHorizontalAlignment(SwingConstants.CENTER);
@@ -126,6 +137,7 @@ public class MenuMulti extends Menu {
 		portHost.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		portHost.setEnabled(false);
 
+		// Check box for who starts first
 		startFirstCheckbox = new JCheckBox("Start first");
 		startFirstCheckbox.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		startFirstCheckbox.setSelected(true);
@@ -135,8 +147,7 @@ public class MenuMulti extends Menu {
 		startFirstCheckbox.setContentAreaFilled(false);
 		startFirstCheckbox.setEnabled(false);
 
-		panel.add(startFirstCheckbox);
-
+		// Button for starting a game as server
 		createServer = new JButton("");
 		createServer.setBounds(177, 108, 80, 40);
 		createServer.setEnabled(false);
@@ -160,6 +171,7 @@ public class MenuMulti extends Menu {
 			}
 		});
 
+		// Label for entering IP for client
 		enterIP = new JLabel("Enter IP:");
 		enterIP.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		enterIP.setBounds(37, 196, 220, 20);
@@ -167,6 +179,7 @@ public class MenuMulti extends Menu {
 		enterIP.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 		enterIP.setEnabled(false);
 
+		// Text field for entering IP for client
 		IP = new JTextField();
 		IP.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		IP.setHorizontalAlignment(SwingConstants.CENTER);
@@ -178,6 +191,7 @@ public class MenuMulti extends Menu {
 		IP.setColumns(10);
 		IP.setEnabled(false);
 
+		// Label for entering port for client
 		enterPortJoin = new JLabel("Enter port:");
 		enterPortJoin.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		enterPortJoin.setBounds(37, 258, 220, 20);
@@ -186,6 +200,7 @@ public class MenuMulti extends Menu {
 		enterPortJoin.setEnabled(false);
 		enterPortJoin.setEnabled(false);
 
+		// Text field for entering port for client
 		portJoin = new JTextField();
 		portJoin.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		portJoin.setHorizontalAlignment(SwingConstants.CENTER);
@@ -197,6 +212,7 @@ public class MenuMulti extends Menu {
 		portJoin.setColumns(10);
 		portJoin.setEnabled(false);
 
+		// Button for starting game as client
 		joinServer = new JButton("");
 		joinServer.setBounds(177, 320, 80, 40);
 		joinServer.setEnabled(false);
@@ -213,12 +229,14 @@ public class MenuMulti extends Menu {
 			}
 		});
 
+		// add all elements to the panel
 		panel.add(hostGameRadio);
 		panel.add(joinGameRadio);
 		panel.add(hostName);
 		panel.add(joinName);
 		panel.add(enterPortHost);
 		panel.add(portHost);
+		panel.add(startFirstCheckbox);
 		panel.add(createServer);
 		panel.add(enterIP);
 		panel.add(IP);

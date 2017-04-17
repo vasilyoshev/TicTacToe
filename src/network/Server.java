@@ -18,6 +18,9 @@ public class Server implements Runnable {
 	protected Socket clientSocket;
 	protected Thread runningThread;
 
+	/**
+	 * Default constructor.
+	 */
 	public Server(int port) {
 		this.port = port;
 		serverSocket = null;
@@ -25,8 +28,9 @@ public class Server implements Runnable {
 		runningThread = null;
 	}
 
+	@Override
 	public void run() {
-		synchronized (this) { // TODO do I need this?
+		synchronized (this) {
 			runningThread = Thread.currentThread();
 		}
 
@@ -42,20 +46,32 @@ public class Server implements Runnable {
 		}
 	}
 
+	/**
+	 * Creates new server socket with the given port.
+	 */
 	private void openServerSocket() throws IOException {
 		serverSocket = new ServerSocket(port);
 	}
 
+	/**
+	 * Waits until a client connects.
+	 */
 	private void waitForConnection() throws IOException {
 		clientSocket = serverSocket.accept();
 	}
 
+	/**
+	 * Sets up input and output streams.
+	 */
 	private void setupStreams() throws IOException {
 		IOUtils.setOutput(new DataOutputStream(clientSocket.getOutputStream()));
 		IOUtils.getOutput().flush();
 		IOUtils.setInput(new DataInputStream(clientSocket.getInputStream()));
 	}
 
+	/**
+	 * Implements interaction between the client and server.
+	 */
 	private void whileConnected() throws IOException {
 		// initialize players and turns
 		IOUtils.sendFirst(IOUtils.isServerFirst());
@@ -81,11 +97,15 @@ public class Server implements Runnable {
 		}
 	}
 
+	/**
+	 * Closes streams and sockets.
+	 */
 	public void closeConnection() {
 		try {
 			IOUtils.getOutput().close(); // Closes the output path to the client
 			IOUtils.getInput().close(); // Closes the input path to the server
 			clientSocket.close(); // Closes the connection with the client
+			serverSocket.close(); // Closes the server socket
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}

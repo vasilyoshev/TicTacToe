@@ -10,77 +10,94 @@ public final class IOUtils {
 	private static DataOutputStream output;
 	private static boolean serverIsFirst;
 
-	// private constructor to prevent instantiation
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
 	private IOUtils() {
 	}
 
+	/**
+	 * Receives move from input stream.
+	 */
 	public static int[] receiveMove() {
 		int[] move = new int[2];
 		try {
+			// while there is no input wait
 			while (getInput().available() == 0)
 				;
 			for (int i = 0; i < 2; i++) {
 				move[i] = getInput().readInt();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(); // in case of improper usage of code
 		}
 		return move;
 	}
 
+	/**
+	 * Sends move to output stream and flushes stream.
+	 */
 	public static void sendMove(int row, int col) {
 		try {
 			getOutput().writeInt(row);
 			getOutput().writeInt(col);
 			getOutput().flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(); // in case of improper usage of code
 		}
 	}
-	
-	
+
+	/**
+	 * Sends name to output stream.
+	 */
 	public static void sendName(String name) {
 		try {
 			getOutput().writeUTF(name);
 			getOutput().flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(); // in case of improper usage of code
 		}
 	}
-	
+
+	/**
+	 * Receives name from input stream.
+	 */
 	public static String receiveName() {
 		try {
 			return getInput().readUTF();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(); // in case of improper usage of code
 		}
 	}
 
+	/**
+	 * Sends who starts first to output stream.
+	 */
 	public static void sendFirst(boolean serverIsFirst) {
 		try {
 			getOutput().writeBoolean(isServerFirst());
 			getOutput().flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public static boolean receiveFirst() {
-		try {
-			return getInput().readBoolean();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException(); // in case of improper usage of code
 		}
 	}
-	
-	
+
+	/**
+	 * Receive who starts first from input stream.
+	 */
+	public static boolean receiveFirst() {
+		try {
+			return getInput().readBoolean();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(); // in case of improper usage of code
+		}
+	}
 
 	/**
 	 * @return the input
@@ -90,7 +107,8 @@ public final class IOUtils {
 	}
 
 	/**
-	 * @param input the input to set
+	 * @param input
+	 *            the input to set
 	 */
 	public static void setInput(DataInputStream input) {
 		IOUtils.input = input;
@@ -104,7 +122,8 @@ public final class IOUtils {
 	}
 
 	/**
-	 * @param output the output to set
+	 * @param output
+	 *            the output to set
 	 */
 	public static void setOutput(DataOutputStream output) {
 		IOUtils.output = output;
@@ -118,7 +137,8 @@ public final class IOUtils {
 	}
 
 	/**
-	 * @param serverIsFirst the serverIsFirst to set
+	 * @param serverIsFirst
+	 *            the serverIsFirst to set
 	 */
 	public static void setServerFirst(boolean serverIsFirst) {
 		IOUtils.serverIsFirst = serverIsFirst;

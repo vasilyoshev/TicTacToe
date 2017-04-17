@@ -14,23 +14,36 @@ import ui.game.GameUtils;
  * The Cell class models each individual cell of the game board.
  */
 public class Cell {
-	// Package access
-	private Seed content; // Seed.EMPTY, Seed.CROSS, Seed.NOUGHT
+	private Seed content;
 	private int row, col; // row and column of this cell
 
-	/** Constructor to initialize this cell with the specified row and col */
+	/**
+	 * Constructor to initialize this cell with the specified row and column.
+	 * 
+	 * @param row
+	 *            the row of this cell
+	 * @param col
+	 *            the column of this cell
+	 */
 	public Cell(int row, int col) {
 		this.row = row;
 		this.col = col;
 		clear(); // clear content
 	}
 
-	/** Clear this cell's content to EMPTY */
+	/**
+	 * Clears this cell's content to EMPTY.
+	 */
 	public void clear() {
 		content = Seed.EMPTY;
 	}
 
-	/** Paint itself on the graphics canvas, given the Graphics context */
+	/**
+	 * Paints itself on the graphics canvas, given the Graphics context.
+	 * 
+	 * @param g
+	 *            graphics context onto which can be drawn
+	 */
 	public void paint(Graphics g) {
 		int x1 = col * GameUtils.getCellSize();
 		int y1 = row * GameUtils.getCellSize();
@@ -40,13 +53,13 @@ public class Cell {
 			try {
 				img = ImageIO.read(new File(Image.getCrossImg()));
 			} catch (IOException e) {
-				System.out.println("Cannot find Cross image.");
+				throw new RuntimeException("Cannot find Cross image.");
 			}
 		} else if (content == Seed.NOUGHT) {
 			try {
 				img = ImageIO.read(new File(Image.getNoughtImg()));
 			} catch (IOException e) {
-				System.out.println("Cannot find Nought image.");
+				throw new RuntimeException("Cannot find Nought image.");
 			}
 		}
 
@@ -54,12 +67,20 @@ public class Cell {
 			g.drawImage(img, x1, y1, null);
 	}
 
+	/**
+	 * Getter for the content of the cell.
+	 */
 	public Seed getContent() {
 		return content;
 	}
 
+	/**
+	 * Setter for the content of the cell.
+	 * 
+	 * @param content
+	 *            the content to be set
+	 */
 	public void setContent(Seed content) {
 		this.content = content;
 	}
-
 }

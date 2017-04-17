@@ -14,8 +14,12 @@ import ui.Image;
 @SuppressWarnings("serial")
 public class MenuMain extends Menu {
 
+	/**
+	 * Default constructor for adding buttons and label to the frame.
+	 */
 	public MenuMain() {
-		setTitle("Choose game mode");
+		// title of the frame
+		setTitle("Tic-Tac-Toe");
 
 		JLabel ticTacToeLabel = new JLabel("");
 		panel.add(ticTacToeLabel);

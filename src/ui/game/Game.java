@@ -35,19 +35,23 @@ public abstract class Game extends JPanel {
 	protected JButton newGame; // new game button
 	private JLabel names; // prints names of players
 	private JLabel result; // prints current score
-	private JDialog end;
+	private JDialog end; // prints the winner in the end of a game
 
-	/** Constructor to setup the UI and game components */
+	/**
+	 * Default constructor to setup the UI and game components.
+	 */
 	public Game() {
 
 		setLayout(null); // use absolute layout
 		setPreferredSize(new Dimension(700, 450));
 
+		// Label for the result
 		resultLabel = new JLabel("Result");
 		resultLabel.setIcon(new ImageIcon(Image.getResult()));
 		resultLabel.setBounds(464, 26, 220, 65);
 		add(resultLabel);
 
+		// Button for changing the theme of the game and menus
 		changeTheme = new JButton("");
 		changeTheme.setIcon(new ImageIcon(Image.getTheme()));
 		changeTheme.setRolloverIcon(new ImageIcon(Image.getThemeHover()));
@@ -63,6 +67,7 @@ public abstract class Game extends JPanel {
 			}
 		});
 
+		// Button for starting a new game
 		newGame = new JButton("");
 		newGame.setIcon(new ImageIcon(Image.getNewGame()));
 		newGame.setRolloverIcon(new ImageIcon(Image.getNewGameHover()));
@@ -77,6 +82,7 @@ public abstract class Game extends JPanel {
 			}
 		});
 
+		// Label for displaying the names of the players
 		names = new JLabel("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 		names.setVerticalAlignment(SwingConstants.TOP);
 		names.setFont(new Font("Century Gothic", Font.PLAIN, 30));
@@ -84,6 +90,7 @@ public abstract class Game extends JPanel {
 		names.setForeground(new Color(Image.getRed(), Image.getGreen(), Image.getBlue()));
 		add(names);
 
+		// Label for displaying the current score
 		result = new JLabel("<html>0<br><br>0</html>", SwingConstants.RIGHT);
 		result.setVerticalAlignment(SwingConstants.TOP);
 		result.setFont(new Font("Century Gothic", Font.PLAIN, 30));
@@ -99,10 +106,13 @@ public abstract class Game extends JPanel {
 			}
 		});
 
-		GameUtils.setBoard(new Board()); // allocate the game-board
+		GameUtils.setBoard(new Board()); // Allocate the game-board
 		initGame(); // Initialize the game variables
 	}
 
+	/**
+	 * Action performed on mouse click.
+	 */
 	protected void click(MouseEvent e) {
 		int mouseX = e.getX();
 		int mouseY = e.getY();
@@ -110,20 +120,27 @@ public abstract class Game extends JPanel {
 		GameUtils.setRow(mouseY / GameUtils.getCellSize());
 		GameUtils.setCol(mouseX / GameUtils.getCellSize());
 
+		// If click is in the bounds of the grid
+		// AND the selected cell is empty
+		// AND if it's my move
 		if (GameUtils.getRow() >= 0 && GameUtils.getRow() < GameUtils.getRows() && GameUtils.getCol() >= 0
 				&& GameUtils.getCol() < GameUtils.getCols()
 				&& GameUtils.getBoard().getCells()[GameUtils.getRow()][GameUtils.getCol()].getContent() == Seed.EMPTY
 				&& GameUtils.isMyMove()) {
 			GameUtils.getBoard().getCells()[GameUtils.getRow()][GameUtils.getCol()]
-					.setContent(GameUtils.getCurrentPlayer()); // move
-			updateGame(GameUtils.getCurrentPlayer(), GameUtils.getRow(), GameUtils.getCol()); // update
-			// currentState
+					.setContent(GameUtils.getCurrentPlayer()); // Make move
+			// Update currentState
+			updateGame(GameUtils.getCurrentPlayer(), GameUtils.getRow(), GameUtils.getCol());
 		}
 		// Refresh the drawing canvas
 		repaint(); // Call-back paintComponent().
 	}
 
+	/**
+	 * Action performed when New game button is clicked.
+	 */
 	protected void newGame() {
+		// Resets score, current and starting player
 		GameUtils.setResultX(0);
 		GameUtils.setResultO(0);
 		initGame();
@@ -132,7 +149,9 @@ public abstract class Game extends JPanel {
 		repaint();
 	}
 
-	/** Initialize the game-board contents and the current-state */
+	/**
+	 * Initialize the game-board contents and the current-state.
+	 */
 	public void initGame() {
 		Timer timer = new Timer(500, new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -143,11 +162,12 @@ public abstract class Game extends JPanel {
 		timer.setRepeats(false);
 		timer.start();
 
+		// when a game is WON
 		if (GameUtils.getCurrentState() == State.CROSS_WON || GameUtils.getCurrentState() == State.NOUGHT_WON) {
 			GameUtils.setCurrentPlayer((GameUtils.getCurrentState() == State.CROSS_WON) ? Seed.CROSS : Seed.NOUGHT);
 			GameUtils.setStartingPlayer(GameUtils.getCurrentPlayer());
 
-		} else { // when State is PLAYING
+		} else { // when State is PLAYING or DRAW
 			GameUtils.setCurrentPlayer(GameUtils.getStartingPlayer());
 		}
 		GameUtils.setCurrentState(State.PLAYING);
@@ -155,7 +175,7 @@ public abstract class Game extends JPanel {
 
 	/**
 	 * Update the currentState after the player with "theSeed" has placed on
-	 * (row, col)
+	 * (row, col).
 	 */
 	public void updateGame(Seed theSeed, int row, int col) {
 		if (GameUtils.getBoard().hasWon(theSeed, row, col)) { // check for win
@@ -168,7 +188,6 @@ public abstract class Game extends JPanel {
 
 			if (GameUtils.getCurrentState() == State.CROSS_WON) {
 				end.add(new JLabel(new ImageIcon(Image.getxWins())));
-				// TODO add X won
 				end.pack();
 				end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
 				end.setVisible(true);
@@ -177,7 +196,6 @@ public abstract class Game extends JPanel {
 				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			} else {
 				end.add(new JLabel(new ImageIcon(Image.getoWins())));
-				// TODO add O won
 				end.pack();
 				end.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
 				end.setVisible(true);
@@ -186,6 +204,7 @@ public abstract class Game extends JPanel {
 				names.setText("<html>" + GameUtils.getPlayerX() + "<br><br>" + GameUtils.getPlayerO() + "</html>");
 			}
 
+			// Remove the dialog after a minute
 			Timer timer = new Timer(1000, new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					end.dispose();
@@ -221,7 +240,6 @@ public abstract class Game extends JPanel {
 		}
 	}
 
-	/** Custom painting codes on this JPanel */
 	@Override
 	public void paintComponent(Graphics g) { // invoke via repaint()
 		super.paintComponent(g); // fill background

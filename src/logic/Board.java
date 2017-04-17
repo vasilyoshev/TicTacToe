@@ -14,22 +14,25 @@ import ui.game.GameUtils;
  * The Board class models the ROWS-by-COLS game-board.
  */
 public class Board {
-	// package access TODO make setters and getters
 	private Cell[][] cells; // composes of 2D array of ROWS-by-COLS Cell
-							/** Constructor to initialize the game board */
+
+	/**
+	 * Constructor to initialize the game board.
+	 */
 	public Board() {
-		setCells(new Cell[GameUtils.getRows()][GameUtils.getCols()]); // allocate the
-															// array
+		// allocate the array
+		setCells(new Cell[GameUtils.getRows()][GameUtils.getCols()]);
 		for (int row = 0; row < GameUtils.getRows(); ++row) {
 			for (int col = 0; col < GameUtils.getCols(); ++col) {
-				getCells()[row][col] = new Cell(row, col); // allocate element
-															// of
-															// array
+				// allocate element of array
+				getCells()[row][col] = new Cell(row, col);
 			}
 		}
 	}
 
-	/** Initialize (or re-initialize) the game board */
+	/**
+	 * Initialize (or re-initialize) the game board
+	 */
 	public void init() {
 		for (int row = 0; row < GameUtils.getRows(); ++row) {
 			for (int col = 0; col < GameUtils.getCols(); ++col) {
@@ -38,12 +41,14 @@ public class Board {
 		}
 	}
 
-	/** Return true if it is a draw (i.e., no more EMPTY cell) */
+	/**
+	 * @return true if it is a draw
+	 */
 	public boolean isDraw() {
-		for (int row = 0; row < GameUtils.getRows(); ++row) {
-			for (int col = 0; col < GameUtils.getCols(); ++col) {
+		for (int row = 0; row < GameUtils.getRows(); row++) {
+			for (int col = 0; col < GameUtils.getCols(); col++) {
 				if (getCells()[row][col].getContent() == Seed.EMPTY) {
-					return false; // an empty seed found, not a draw, exit
+					return false; // an empty seed found, not a draw
 				}
 			}
 		}
@@ -51,8 +56,14 @@ public class Board {
 	}
 
 	/**
-	 * Return true if the player with "seed" has won after placing at (seedRow,
-	 * seedCol)
+	 * @param seed
+	 *            the current player
+	 * @param seedRow
+	 *            Y coordinate of click
+	 * @param seedCol
+	 *            X coordinate of click
+	 * @return true if the player with "seed" has won after placing at (seedRow,
+	 *         seedCol)
 	 */
 	public boolean hasWon(Seed seed, int seedRow, int seedCol) {
 		return (getCells()[seedRow][0].getContent() == seed // 3-in-the-row
@@ -67,18 +78,23 @@ public class Board {
 						&& getCells()[2][0].getContent() == seed);
 	}
 
-	/** Paint itself on the graphics canvas, given the Graphics context */
+	/**
+	 * Paints itself on the graphics canvas, given the Graphics context.
+	 * 
+	 * @param g
+	 *            graphics context onto which can be drawn
+	 */
 	public void paint(Graphics g) {
 
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(new File(Image.getGrid()));
 		} catch (IOException e) {
-			// TODO
+			throw new RuntimeException("Cannot find Grid image.");
 		}
 		g.drawImage(img, 0, 0, null);
 
-		// Draw all the cells
+		// draw all the cells
 		for (int row = 0; row < GameUtils.getRows(); ++row) {
 			for (int col = 0; col < GameUtils.getCols(); ++col) {
 				getCells()[row][col].paint(g); // ask the cell to paint itself
@@ -87,6 +103,8 @@ public class Board {
 	}
 
 	/**
+	 * Getter for cells field.
+	 * 
 	 * @return the cells
 	 */
 	public Cell[][] getCells() {
@@ -94,6 +112,8 @@ public class Board {
 	}
 
 	/**
+	 * Setter for cells field.
+	 * 
 	 * @param cells
 	 *            the cells to set
 	 */
